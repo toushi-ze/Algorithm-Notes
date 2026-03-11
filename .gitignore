@@ -1,0 +1,13 @@
+.vscode/
+.vs/
+.cache
+*.exe
+*.o
+*.out
+*.obj
+bin/
+obj/
+Thumbs.db
+.DS_Store
+*.log
+*.tmp
