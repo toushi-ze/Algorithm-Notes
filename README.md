@@ -1,4 +1,4 @@
-# My Algorithm-Notes:writing_hand:   
+# My Algorithm-Notes :bulb: 
 
 > **Ugly action beats perfection**
 
