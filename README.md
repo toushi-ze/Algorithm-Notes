@@ -25,6 +25,8 @@
 | 2026-03-10 | 21. 合并两个有序链表 | 🟢 | 哨兵位 | 同[Analysis](./docs/92_reverse_linked_list_ii.md)一并总结 | [Code](./src/21_merge_two_sorted_lists.c) |
 | 2026-03-11 | 206. 反转链表 | 🟢 | 三指针 | 同[Analysis](./docs/92_reverse_linked_list_ii.md)一并总结 | [Code](./src/206_reverse_linked_list.c) |
 | 2026-03-11 | 92. 反转链表 II | 🟡 | 区间反转 | [Analysis](./docs/92_reverse_linked_list_ii.md) | [Code](./src/92_reverse_linked_list_ii.c) |
+| 2026-03-16 | 19. 删除倒数第 N 个节点 | 🟡 | 快慢指针 | [Analysis](./docs/19_remove_nth_node_from_end.md) | [Code](./src/19_remove_nth_node_from_end.c) |
+| 2026-03-19 | 25. K 个一组翻转链表 | 🔴 | 分段递归/迭代 | [Analysis](./docs/25_reverse_nodes_in_k_group.md) | [Code](./src/25_reverse_nodes_in_k_group.c) |
 
 ---
 
@@ -46,8 +48,11 @@
 
 - [2026-03-12] 提交 LC92 综合题解
    > **说明**：由于 LC92 涵盖了前两题的核心考点，仅保留一份题解包含全部收获。
-   > 源码部分（LC206, LC21, LC92）已全部同步更新。   
+   > 源码部分（LC206, LC21, LC92）已全部同步更新。
 
+- [2026-03-16] 提交 LC19 综合题解 
+ 
+- [2026-03-19] 提交 LC25 综合题解
 ## :wave:交流
 - 欢迎一起完善题解
 - 若发现代码错误或有更优解法，欢迎提交 Issue
