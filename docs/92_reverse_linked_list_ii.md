@@ -47,5 +47,5 @@
 
 ---
 ## 🔗 相关资源
-* **源代码实现**：[92_reverse_linked_list_ii.c](../src/92_reverse_linked_list_ii.c)
+* **源代码实现**：[92_reverse_linked_list_ii.c](../src/list/list_range_reverse.c)
 * **所在目录**：[查看所有源码](../src/)

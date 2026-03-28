@@ -44,5 +44,5 @@
 ---
 
 ## 🔗 相关资源
-* **源代码实现**：[19_remove_nth_node_from_end_of_list.c](../src/19_remove_nth_node_from_end_of_list.c)
+* **源代码实现**：[19_remove_nth_node_from_end_of_list.c](../src/list/list_nth_remove.c)
 * **所在目录**：[查看所有源码](../src/)

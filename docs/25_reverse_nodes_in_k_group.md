@@ -50,5 +50,5 @@
 ---
 
 ## 🔗 相关资源
-* **源代码实现**：[25_reverse_nodes_in_k_group.c](../src/25_reverse_nodes_in_k_group.c)
+* **源代码实现**：[25_reverse_nodes_in_k_group.c](../src/list_k_group_reverse.c)
 * **所在目录**：[查看所有源码](../src/)
