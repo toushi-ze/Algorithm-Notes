@@ -10,23 +10,39 @@
 
 ## :mag:目录结构
 ```
-├── src/                # 源码 (.c 文件)
-│   └── 92_reverse_linked_list_ii.c
-├── docs/               # 题解笔记
-│   └── 92_reverse_linked_list_ii.md
-├── .gitignore          # 忽略无关文件
-└── README.md           # 仓库说明文档
+Algorithm/
+├── docs/
+│   └── 25_reverse_nodes_in_k_group.md  # 示例题解
+│       ...                             # 其他题解
+├── inc/
+│   └── list/
+│       ├── list_node.h                # 链表节点定义
+│       └── list_k_group_reverse.h     # 函数声明
+│       ...                            # 其他头文件
+├── src/
+│   └── list/
+│       └── list_k_group_reverse.c     # 函数实现
+│       ...                            # 其他源文件
+├── test/
+│   └── main.c                         # 测试入口
+├── .gitignore                         # 忽略无关文件
+├── .clang-format                      # C 语言代码格式化配置（Google 风格）
+├── cmake_build.sh                     # 一键构建脚本（编译+运行+清理）
+├── CMakeLists.txt                     # CMake 构建配置
+└── README.md                          # 仓库说明文档
 ```
 
 ## 🚀 进度 (Progress)
 
-| 日期 | 题目 | 难度 | 核心考点 | 深度题解 | 源码实现 |
-| :---: | :--- | :---: | :--- | :--- | :--- |
-| 2026-03-10 | 21. 合并两个有序链表 | 🟢 | 哨兵位 | 同[Analysis](./docs/92_reverse_linked_list_ii.md)一并总结 | [Code](./src/21_merge_two_sorted_lists.c) |
-| 2026-03-11 | 206. 反转链表 | 🟢 | 三指针 | 同[Analysis](./docs/92_reverse_linked_list_ii.md)一并总结 | [Code](./src/206_reverse_linked_list.c) |
-| 2026-03-11 | 92. 反转链表 II | 🟡 | 区间反转 | [Analysis](./docs/92_reverse_linked_list_ii.md) | [Code](./src/92_reverse_linked_list_ii.c) |
-| 2026-03-16 | 19. 删除倒数第 N 个节点 | 🟡 | 快慢指针 | [Analysis](./docs/19_remove_nth_node_from_end.md) | [Code](./src/19_remove_nth_node_from_end.c) |
-| 2026-03-19 | 25. K 个一组翻转链表 | 🔴 | 分段递归/迭代 | [Analysis](./docs/25_reverse_nodes_in_k_group.md) | [Code](./src/25_reverse_nodes_in_k_group.c) |
+| 日期 | 题目 | 难度 | 核心考点 | 题解 | 源码 |
+| :---: | :--- | :---: | :--- | :---: | :---: |
+| 2026-03-10 | 21. 合并两个有序链表 | 🟢 | 哨兵位 | [Analysis](./docs/92_reverse_linked_list_ii.md) | [Code](./src/list/list_merge.c) |
+| 2026-03-11 | 206. 反转链表 | 🟢 | 三指针 | [Analysis](./docs/92_reverse_linked_list_ii.md) | [Code](./src/list/list_reverse.c) |
+| 2026-03-11 | 92. 反转链表 II | 🟡 | 区间反转 | [Analysis](./docs/92_reverse_linked_list_ii.md) | [Code](./src/list/list_range_reverse.c) |
+| 2026-03-16 | 19. 删除倒数第N个节点 | 🟡 | 快慢指针 | [Analysis](./docs/19_remove_nth_node_from_end_of_list.md) | [Code](./src/list/list_nth_remove.c) |
+| 2026-03-19 | 25. K个一组翻转链表 | 🔴 | K组反转 | [Analysis](./docs/25_reverse_nodes_in_k_group.md) | [Code](./src/list/list_k_group_reverse.c) |
+| 2026-03-22 | 141. 环形链表 | 🟢 | 快慢指针/判圈 | [Analysis](./docs/141_linked_list_cycle.md) | [Code](./src/list/list_cycle.c) |
+| 2026-03-26 | 142. 环形链表 II | 🟡 | 追击问题 | [Analysis](./docs/142_linked_list_cycle_ii.md) | [Code](./src/list/list_cycle_ii.c) |
 
 ---
 
@@ -53,6 +69,10 @@
 - [2026-03-16] 提交 LC19 综合题解 
  
 - [2026-03-19] 提交 LC25 综合题解
+
+- [2026-03-22] 提交 LC141 综合题解
+
+- [2026-03-26] 提交 LC142 综合题解
 ## :wave:交流
 - 欢迎一起完善题解
 - 若发现代码错误或有更优解法，欢迎提交 Issue
