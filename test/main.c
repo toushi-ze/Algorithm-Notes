@@ -13,6 +13,7 @@ static struct list_node* list_nodeCreate(int val);
 static void list_nodePrint(struct list_node* head);
 static void list_nodeFree(struct list_node* head);
 
+/* todo: 注意驼峰或下划线用一种方式，不要又驼峰，又下划线*/
 static struct list_node* list_nodeCreate(int val) {
   struct list_node* node = (struct list_node*)malloc(sizeof(struct list_node));
   memset(node, 0, sizeof(*node));
