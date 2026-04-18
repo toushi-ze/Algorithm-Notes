@@ -1,8 +1,21 @@
+/**
+ * @file list_cycle_ii.h
+ * @brief Find cycle entry point in linked list
+ */
+
 #ifndef LIST_CYCLE_II_H
 #define LIST_CYCLE_II_H
 
-#include "list_node.h"
+#include "list/list_node.h"
 
-struct list_node *list_cycle_entry_find(struct list_node *head);
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+list_node_t *list_cycle_entry_find(list_node_t *head);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -1,31 +1,36 @@
+/**
+ * @file list_nth_remove.c
+ * @brief Remove Nth node from end of list using two pointers
+ */
+
 #include "list/list_nth_remove.h"
-#include <stdlib.h>
-#include <string.h>
 
-struct list_node* listNthRemove(struct list_node* head, int n) {
-  struct list_node* dummy = (struct list_node*)malloc(sizeof(struct list_node));
-  memset(dummy, 0, sizeof(*dummy));
-  dummy->next = head;
+list_node_t *list_nth_remove(list_node_t *head, int n)
+{
+    if (head == NULL || n <= 0) {
+        return head;
+    }
 
-  struct list_node* fast = dummy;
-  struct list_node* slow = dummy;
+    list_node_t dummy;
+    dummy.next = head;
+    list_node_t *fast = &dummy;
+    list_node_t *slow = &dummy;
 
-  for (int i = 0; i <= n; i++) {
-    fast = fast->next;
-  }
+    for (int i = 0; i <= n; i++) {
+        if (fast == NULL) {
+            return head;
+        }
+        fast = fast->next;
+    }
 
-  while (NULL != fast) {
-    fast = fast->next;
-    slow = slow->next;
-  }
+    while (fast != NULL) {
+        fast = fast->next;
+        slow = slow->next;
+    }
 
-  struct list_node* target = slow->next;
-  slow->next = slow->next->next;
+    list_node_t *to_remove = slow->next;
+    slow->next = to_remove->next;
+    free(to_remove);
 
-  free(target);
-
-  struct list_node* newHead = dummy->next;
-  free(dummy);
-
-  return newHead;
+    return dummy.next;
 }

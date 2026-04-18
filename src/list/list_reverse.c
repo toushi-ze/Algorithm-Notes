@@ -1,16 +1,21 @@
+/**
+ * @file list_reverse.c
+ * @brief Reverse a linked list (iterative approach)
+ */
+
 #include "list/list_reverse.h"
-#include <stddef.h>
 
-struct list_node* listReverse(struct list_node* head) {
-  struct list_node* prev = NULL;
-  struct list_node* curr = head;
+list_node_t *list_reverse(list_node_t *head)
+{
+    list_node_t *prev = NULL;
+    list_node_t *current = head;
 
-  while (NULL != curr) {
-    struct list_node* nextTemp = curr->next;
-    curr->next = prev;
-    prev = curr;
-    curr = nextTemp;
-  }
+    while (current != NULL) {
+        list_node_t *next = current->next;
+        current->next = prev;
+        prev = current;
+        current = next;
+    }
 
-  return prev;
+    return prev;
 }

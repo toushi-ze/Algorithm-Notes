@@ -1,52 +1,47 @@
+/**
+ * @file list_k_group_reverse.c
+ * @brief Reverse nodes in k-group chunks
+ */
+
 #include "list/list_k_group_reverse.h"
-#include <stdlib.h>
-#include <string.h>
 
-static struct list_node* getKthNode(struct list_node* curr, int k) {
-  while (NULL != curr && k > 0) {
-    curr = curr->next;
-    k--;
-  }
-  return curr;
-}
-
-struct list_node* listKGroupReverse(struct list_node* head, int k) {
-  if (NULL == head || 1 == k) {
-    return head;
-  }
-
-  struct list_node* dummy = (struct list_node*)malloc(sizeof(struct list_node));
-  memset(dummy, 0, sizeof(*dummy));
-  dummy->next = head;
-
-  struct list_node* groupPrev = dummy;
-
-  while (1) {
-    struct list_node* kthNode = getKthNode(groupPrev, k);
-    if (NULL == kthNode) {
-      break;
-    }
-
-    struct list_node* groupNext = kthNode->next;
-
-    struct list_node* prev = groupNext;
-    struct list_node* curr = groupPrev->next;
-    struct list_node* tmp = NULL;
+/**
+ * @brief Reverse k nodes and return new head and tail
+ */
+static list_node_t *reverse_k_nodes(list_node_t *head, int k, list_node_t **new_tail)
+{
+    list_node_t *prev = NULL;
+    list_node_t *current = head;
 
     for (int i = 0; i < k; i++) {
-      tmp = curr->next;
-      curr->next = prev;
-      prev = curr;
-      curr = tmp;
+        list_node_t *next = current->next;
+        current->next = prev;
+        prev = current;
+        current = next;
     }
 
-    struct list_node* nextGroupPrev = groupPrev->next;
-    groupPrev->next = kthNode;
-    groupPrev = nextGroupPrev;
-  }
+    *new_tail = head;
+    return prev;
+}
 
-  struct list_node* newHead = dummy->next;
-  free(dummy);
+list_node_t *list_k_group_reverse(list_node_t *head, int k)
+{
+    if (head == NULL || k <= 1) {
+        return head;
+    }
 
-  return newHead;
+    list_node_t *check = head;
+    for (int i = 0; i < k; i++) {
+        if (check == NULL) {
+            return head;
+        }
+        check = check->next;
+    }
+
+    list_node_t *new_tail = NULL;
+    list_node_t *new_head = reverse_k_nodes(head, k, &new_tail);
+
+    new_tail->next = list_k_group_reverse(check, k);
+
+    return new_head;
 }

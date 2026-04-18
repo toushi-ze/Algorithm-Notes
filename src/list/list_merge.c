@@ -1,29 +1,29 @@
+/**
+ * @file list_merge.c
+ * @brief Merge two sorted linked lists
+ */
+
 #include "list/list_merge.h"
-#include <stddef.h>
-#include <string.h>
 
-struct list_node* listMerge(struct list_node* list1, struct list_node* list2) {
-  struct list_node dummy;
-  struct list_node* curr = &dummy;
+list_node_t *list_merge(list_node_t *l1, list_node_t *l2)
+{
+    list_node_t dummy;
+    list_node_t *tail = &dummy;
+    dummy.next = NULL;
 
-  memset(&dummy, 0, sizeof(dummy));
-
-  while (NULL != list1 && NULL != list2) {
-    if (list1->val < list2->val) {
-      curr->next = list1;
-      list1 = list1->next;
-    } else {
-      curr->next = list2;
-      list2 = list2->next;
+    while (l1 != NULL && l2 != NULL) {
+        if (l1->val <= l2->val) {
+            tail->next = l1;
+            l1 = l1->next;
+        } else {
+            tail->next = l2;
+            l2 = l2->next;
+        }
+        tail = tail->next;
     }
-    curr = curr->next;
-  }
 
-  if (NULL != list1) {
-    curr->next = list1;
-  } else {
-    curr->next = list2;
-  }
+    /* Attach remaining nodes */
+    tail->next = (l1 != NULL) ? l1 : l2;
 
-  return dummy.next;
+    return dummy.next;
 }

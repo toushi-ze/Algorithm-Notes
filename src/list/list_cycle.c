@@ -1,17 +1,28 @@
+/**
+ * @file list_cycle.c
+ * @brief Floyd's cycle detection algorithm
+ */
+
 #include "list/list_cycle.h"
+#include <stdbool.h>
 
-int list_cycle_check(struct list_node *head) {
-  struct list_node *slow = head;
-  struct list_node *fast = head;
+bool list_cycle_check(list_node_t *head)
+{
+    if (head == NULL || head->next == NULL) {
+        return false;
+    }
 
-  if (!head || !head->next)
-    return 0;
+    list_node_t *slow = head;
+    list_node_t *fast = head;
 
-  while (fast && fast->next) {
-    slow = slow->next;
-    fast = fast->next->next;
-    if (slow == fast)
-      return 1;
-  }
-  return 0;
+    while (fast != NULL && fast->next != NULL) {
+        slow = slow->next;
+        fast = fast->next->next;
+
+        if (slow == fast) {
+            return true;
+        }
+    }
+
+    return false;
 }

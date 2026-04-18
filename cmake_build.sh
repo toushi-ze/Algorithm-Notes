@@ -1,8 +1,11 @@
 #!/bin/bash
+# cmake_build.sh - Build and test script for Generic Linked List Library
+# Usage: ./cmake_build.sh [build|test|clean|all]
 
-# CMake build script for list algorithms project
+set -euo pipefail
 
-set -e
+BUILD_DIR="build"
+BUILD_TYPE="Release"
 
 # Colors
 RED='\033[0;31m'
@@ -10,108 +13,118 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m'
 
-# Directories
-BUILD_DIR="build"
-
-# Functions
-print_info() {
-  echo -e "${GREEN}[INFO]${NC} $1"
+info() {
+    echo -e "${GREEN}[INFO]${NC} $1"
 }
 
-print_warn() {
-  echo -e "${YELLOW}[WARN]${NC} $1"
+warn() {
+    echo -e "${YELLOW}[WARN]${NC} $1"
 }
 
-print_error() {
-  echo -e "${RED}[ERROR]${NC} $1"
+error() {
+    echo -e "${RED}[ERROR]${NC} $1"
 }
 
-# Show help
+# 自动查找可执行文件路径
+find_executable() {
+    local base_name="$1"
+    local path1="${BUILD_DIR}/bin/${base_name}"
+    local path2="${BUILD_DIR}/bin/${BUILD_TYPE}/${base_name}"
+    local path3="${BUILD_DIR}/bin/${base_name}.exe"
+    local path4="${BUILD_DIR}/bin/${BUILD_TYPE}/${base_name}.exe"
+
+    if [ -f "$path1" ]; then
+        echo "$path1"
+    elif [ -f "$path2" ]; then
+        echo "$path2"
+    elif [ -f "$path3" ]; then
+        echo "$path3"
+    elif [ -f "$path4" ]; then
+        echo "$path4"
+    else
+        echo ""
+    fi
+}
+
+do_build() {
+    info "Building project..."
+    mkdir -p "$BUILD_DIR"
+    cd "$BUILD_DIR"
+    cmake -DCMAKE_BUILD_TYPE="$BUILD_TYPE" ..
+    cmake --build . --config "$BUILD_TYPE"
+    cd ..
+    info "Build completed successfully."
+}
+
+do_test() {
+    info "Running algorithm tests..."
+
+    EXEC=$(find_executable "algorithms_test")
+    if [ -z "$EXEC" ]; then
+        warn "Tests not built. Building first..."
+        do_build
+        EXEC=$(find_executable "algorithms_test")
+        if [ -z "$EXEC" ]; then
+            error "Test executable still not found after build!"
+            exit 1
+        fi
+    fi
+
+    info "Running: $EXEC"
+    "$EXEC"
+}
+
+do_list_test() {
+    info "Running list unit tests..."
+
+    EXEC=$(find_executable "list_test")
+    if [ -z "$EXEC" ]; then
+        warn "Tests not built. Building first..."
+        do_build
+        EXEC=$(find_executable "list_test")
+        if [ -z "$EXEC" ]; then
+            error "Test executable still not found after build!"
+            exit 1
+        fi
+    fi
+
+    info "Running: $EXEC"
+    "$EXEC"
+}
+
+do_clean() {
+    info "Cleaning build directory..."
+    rm -rf "$BUILD_DIR"
+    info "Clean done."
+}
+
+do_all() {
+    do_build
+    echo
+    do_test
+    echo
+    do_list_test
+}
+
 show_help() {
-  echo "Usage: $0 [command]"
-  echo ""
-  echo "Commands:"
-  echo "  all       Configure and build (default)"
-  echo "  config    Run CMake configuration"
-  echo "  build     Build the project"
-  echo "  clean     Remove build directory"
-  echo "  test      Run tests"
-  echo "  format    Format code with clang-format"
-  echo "  help      Show this help message"
+    echo "Generic Linked List Library - Build & Test Script"
+    echo "Usage: $0 [command]"
+    echo
+    echo "Commands:"
+    echo "  build       仅编译项目"
+    echo "  test        运行算法测试"
+    echo "  list-test   运行链表单元测试(共118项)"
+    echo "  clean       删除构建目录"
+    echo "  all         编译 + 运行全部测试"
+    echo "  help        显示帮助"
 }
 
-# Configure CMake
-cmake_config() {
-  print_info "Configuring CMake..."
-  cmake -S . -B "$BUILD_DIR"
-}
-
-# Build project
-cmake_build() {
-  print_info "Building project..."
-  cmake --build "$BUILD_DIR"
-}
-
-# Clean build directory
-cmake_clean() {
-  print_info "Cleaning build directory..."
-  rm -rf "$BUILD_DIR"
-}
-
-# Run tests
-run_tests() {
-  if [ ! -f "$BUILD_DIR/Debug/list_algo.exe" ]; then
-    print_error "Executable not found. Build first."
-    exit 1
-  fi
-  print_info "Running tests..."
-  "$BUILD_DIR/Debug/list_algo.exe"
-}
-
-# Format code
-format_code() {
-  if ! command -v clang-format &> /dev/null; then
-    print_warn "clang-format not found. Skipping formatting."
-    return
-  fi
-  print_info "Formatting code..."
-  clang-format -i inc/list/*.h src/list/*.c test/main.c
-}
-
-# Main
-main() {
-  local command="${1:-all}"
-
-  case "$command" in
-    all)
-      cmake_config
-      cmake_build
-      print_info "Build complete. Executable: $BUILD_DIR/list_algo"
-      ;;
-    config)
-      cmake_config
-      ;;
-    build)
-      cmake_build
-      ;;
-    clean)
-      cmake_clean
-      ;;
-    test)
-      run_tests
-      ;;
-    format)
-      format_code
-      ;;
-    help|--help|-h)
-      show_help
-      ;;
-    *)
-      print_error "Unknown command: $command"
-      show_help
-      exit 1
-      ;;
-  esac
-}
-
-main "$@"
+case "${1:-all}" in
+    build) do_build ;;
+    test) do_test ;;
+    list-test) do_list_test ;;
+    clean) do_clean ;;
+    all) do_all ;;
+    help|--help|-h) show_help ;;
+    *) error "Unknown command: $1"; show_help; exit 1 ;;
+esac

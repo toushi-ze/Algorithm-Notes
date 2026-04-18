@@ -1,24 +1,32 @@
+/**
+ * @file list_cycle_ii.c
+ * @brief Find cycle entry point using Floyd's algorithm
+ */
+
 #include "list/list_cycle_ii.h"
 
-struct list_node *list_cycle_entry_find(struct list_node *head) {
-  struct list_node *slow = head;
-  struct list_node *fast = head;
-
-  if (!head || !head->next)
-    return NULL;
-
-  while (fast && fast->next) {
-    slow = slow->next;
-    fast = fast->next->next;
-
-    if (slow == fast) {
-      slow = head;
-      while (slow != fast) {
-        slow = slow->next;
-        fast = fast->next;
-      }
-      return slow;
+list_node_t *list_cycle_entry_find(list_node_t *head)
+{
+    if (head == NULL || head->next == NULL) {
+        return NULL;
     }
-  }
-  return NULL;
+
+    list_node_t *slow = head;
+    list_node_t *fast = head;
+
+    while (fast != NULL && fast->next != NULL) {
+        slow = slow->next;
+        fast = fast->next->next;
+
+        if (slow == fast) {
+            list_node_t *entry = head;
+            while (entry != slow) {
+                entry = entry->next;
+                slow = slow->next;
+            }
+            return entry;
+        }
+    }
+
+    return NULL; 
 }
