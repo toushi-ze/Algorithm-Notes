@@ -92,6 +92,24 @@ do_list_test() {
     "$EXEC"
 }
 
+do_stack_queue_test() {
+    info "Running stack & queue unit tests..."
+
+    EXEC=$(find_executable "stack_queue_test")
+    if [ -z "$EXEC" ]; then
+        warn "Tests not built. Building first..."
+        do_build
+        EXEC=$(find_executable "stack_queue_test")
+        if [ -z "$EXEC" ]; then
+            error "Test executable still not found after build!"
+            exit 1
+        fi
+    fi
+
+    info "Running: $EXEC"
+    "$EXEC"
+}
+
 do_clean() {
     info "Cleaning build directory..."
     rm -rf "$BUILD_DIR"
@@ -104,6 +122,8 @@ do_all() {
     do_test
     echo
     do_list_test
+    echo
+    do_stack_queue_test
 }
 
 show_help() {
@@ -111,18 +131,20 @@ show_help() {
     echo "Usage: $0 [command]"
     echo
     echo "Commands:"
-    echo "  build       仅编译项目"
-    echo "  test        运行算法测试"
-    echo "  list-test   运行链表单元测试(共118项)"
-    echo "  clean       删除构建目录"
-    echo "  all         编译 + 运行全部测试"
-    echo "  help        显示帮助"
+    echo "  build             Build project only"
+    echo "  test              Run algorithm tests"
+    echo "  list-test         Run linked list unit tests"
+    echo "  stack-queue-test  Run stack & queue unit tests"
+    echo "  clean             Clean build directory"
+    echo "  all               Build + run all tests (default)"
+    echo "  help              Show this help"
 }
 
 case "${1:-all}" in
     build) do_build ;;
     test) do_test ;;
     list-test) do_list_test ;;
+    stack-queue-test) do_stack_queue_test ;;
     clean) do_clean ;;
     all) do_all ;;
     help|--help|-h) show_help ;;

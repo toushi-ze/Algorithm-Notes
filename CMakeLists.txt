@@ -69,6 +69,38 @@ set_target_properties(algorithms_test PROPERTIES
 )
 
 # ========================================
+# Stack & Queue Library Target
+# ========================================
+add_library(stack_queue STATIC
+    src/stack/stack.c
+    src/queue/queue.c
+)
+
+# Stack & queue library depends on list library
+target_link_libraries(stack_queue list)
+
+# Set library properties
+set_target_properties(stack_queue PROPERTIES
+    OUTPUT_NAME "stack_queue"
+    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+)
+
+# ========================================
+# Stack & Queue Test Executable
+# ========================================
+add_executable(stack_queue_test
+    test/stack_queue_test.c
+)
+
+# Link test executable with stack_queue library (which transitively links list)
+target_link_libraries(stack_queue_test stack_queue list)
+
+# Set test output directory
+set_target_properties(stack_queue_test PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+)
+
+# ========================================
 # Installation
 # ========================================
 # Install headers
@@ -78,13 +110,13 @@ install(DIRECTORY inc/
 )
 
 # Install library
-install(TARGETS list
+install(TARGETS list stack_queue
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
 )
 
 # Install executables (optional)
-install(TARGETS list_test algorithms_test
+install(TARGETS list_test algorithms_test stack_queue_test
     RUNTIME DESTINATION bin
 )
 
@@ -98,6 +130,10 @@ add_test(NAME list_test
 )
 add_test(NAME algorithms_test
     COMMAND algorithms_test
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+add_test(NAME stack_queue_test
+    COMMAND stack_queue_test
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 

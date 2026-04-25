@@ -12,21 +12,32 @@
 ## 2. 项目结构
 
 ```
-D:\gemini\
+D:\demo\
 ├── CMakeLists.txt                  # CMake 构建配置
 ├── cmake_build.sh                  # Bash 构建/测试脚本
 ├── .clang-format                   # 代码格式化配置（Google）
 ├── README.md                       # 项目主文档
 ├── instruction.md                  # 使用说明
-├── inc/list/                       # 头文件目录
-│   ├── list.h                      # 通用链表公共 API
-│   ├── list_node.h                 # 整数链表节点
-├── src/list/                       # 源码目录
-│   ├── list.c                      # 通用链表核心实现
-│   ├── list_node.c                 # 整数节点工具函数
+├── inc/
+│   ├── list/                       # 链表头文件目录
+│   │   ├── list.h                  # 通用链表公共 API
+│   │   └── list_node.h            # 整数链表节点
+│   ├── stack/
+│   │   └── stack.h                # 通用栈公共 API
+│   └── queue/
+│       └── queue.h                # 通用队列公共 API
+├── src/
+│   ├── list/                       # 链表源码目录
+│   │   ├── list.c                  # 通用链表核心实现
+│   │   └── list_node.c            # 整数节点工具函数
+│   ├── stack/
+│   │   └── stack.c                # 通用栈实现
+│   └── queue/
+│       └── queue.c                # 通用队列实现
 ├── test/                           # 测试目录
 │   ├── list_test.c                 # 通用链表单元测试
-│   └── algorithms_test.c           # 算法演示测试
+│   ├── algorithms_test.c           # 算法演示测试
+│   └── stack_queue_test.c         # 栈与队列单元测试
 └── docs/                           # 算法题解文档
 ```
 ---
@@ -78,6 +89,37 @@ D:\gemini\
 | `list_cycle_check` | #141        | Easy | Floyd 判圈算法             |
 | `list_cycle_entry_find` | #142  | Medium | Floyd 算法找环入口        |
 
+### 3.3 通用栈 (Stack)
+
+基于链表封装的 LIFO（后进先出）栈，支持任意数据类型：
+
+| 功能分类   | 函数                   | 说明                                    |
+| ---------- | ---------------------- | --------------------------------------- |
+| 创建/销毁  | `stack_create()`       | 创建空栈                                |
+|            | `stack_destroy()`      | 销毁栈并释放所有元素（置空指针）        |
+|            | `stack_clear()`        | 清空栈但保留栈对象                      |
+| 操作       | `stack_push()`         | 压栈 O(1)                               |
+|            | `stack_pop()`          | 弹栈 O(1)                               |
+|            | `stack_top()`          | 获取栈顶元素 O(1)                       |
+| 信息       | `stack_get_length()`   | O(1) 获取栈长度                         |
+|            | `stack_is_empty()`     | O(1) 判断栈是否为空                     |
+
+### 3.4 通用队列 (Queue)
+
+基于链表封装的 FIFO（先进先出）队列，支持任意数据类型：
+
+| 功能分类   | 函数                   | 说明                                    |
+| ---------- | ---------------------- | --------------------------------------- |
+| 创建/销毁  | `queue_create()`       | 创建空队列                              |
+|            | `queue_destroy()`      | 销毁队列并释放所有元素（置空指针）      |
+|            | `queue_clear()`        | 清空队列但保留队列对象                  |
+| 操作       | `queue_enqueue()`      | 入队 O(1)                               |
+|            | `queue_dequeue()`      | 出队 O(1)                               |
+|            | `queue_front()`        | 获取队首元素 O(1)                       |
+|            | `queue_back()`         | 获取队尾元素 O(1)                       |
+| 信息       | `queue_get_length()`   | O(1) 获取队列长度                       |
+|            | `queue_is_empty()`     | O(1) 判断队列是否为空                   |
+
 ---
 
 ## 4. 构建与运行
@@ -113,12 +155,13 @@ cmake --build . --config Release
 ```bash
 chmod +x cmake_build.sh
 
-./cmake_build.sh build       # 仅构建
-./cmake_build.sh test        # 运行算法测试
-./cmake_build.sh list-test   # 运行通用链表单元测试
-./cmake_build.sh clean       # 清理构建产物
-./cmake_build.sh all         # 构建并运行全部测试（默认）
-./cmake_build.sh help        # 显示帮助
+./cmake_build.sh build             # 仅构建
+./cmake_build.sh test              # 运行算法测试
+./cmake_build.sh list-test         # 运行通用链表单元测试
+./cmake_build.sh stack-queue-test  # 运行栈与队列单元测试
+./cmake_build.sh clean             # 清理构建产物
+./cmake_build.sh all               # 构建并运行全部测试（默认）
+./cmake_build.sh help              # 显示帮助
 ```
 
 ### 4.4 使用 CTest 运行测试
@@ -235,11 +278,77 @@ int main(void)
 }
 ```
 
+### 5.5 使用栈 (Stack)
+
+```c
+#include "stack/stack.h"
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(void)
+{
+    /* 创建栈（使用 free 自动释放内存） */
+    stack_t *stack = stack_create(free);
+    if (!stack) return -1;
+
+    /* 压栈 */
+    for (int i = 1; i <= 5; i++) {
+        int *val = malloc(sizeof(int));
+        *val = i;
+        stack_push(stack, val);
+    }
+
+    /* 弹栈（LIFO: 5, 4, 3, 2, 1） */
+    while (!stack_is_empty(stack)) {
+        int *top = (int *)stack_top(stack);
+        printf("%d ", *top);
+        stack_pop(stack);
+    }
+    printf("\n"); /* 输出: 5 4 3 2 1 */
+
+    stack_destroy(&stack);
+    return 0;
+}
+```
+
+### 5.6 使用队列 (Queue)
+
+```c
+#include "queue/queue.h"
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(void)
+{
+    /* 创建队列（使用 free 自动释放内存） */
+    queue_t *queue = queue_create(free);
+    if (!queue) return -1;
+
+    /* 入队 */
+    for (int i = 1; i <= 5; i++) {
+        int *val = malloc(sizeof(int));
+        *val = i;
+        queue_enqueue(queue, val);
+    }
+
+    /* 出队（FIFO: 1, 2, 3, 4, 5） */
+    while (!queue_is_empty(queue)) {
+        int *front = (int *)queue_front(queue);
+        printf("%d ", *front);
+        queue_dequeue(queue);
+    }
+    printf("\n"); /* 输出: 1 2 3 4 5 */
+
+    queue_destroy(&queue);
+    return 0;
+}
+```
+
 ---
 
 ## 6. 代码规范
 
-- **命名规则:** 函数使用 `list_` 前缀 + 小写下划线（如 `list_insert_tail`）；类型使用 `_t` 后缀（如 `list_t`）
+- **命名规则:** 链表函数使用 `list_` 前缀、栈使用 `stack_` 前缀、队列使用 `queue_` 前缀 + 小写下划线；类型使用 `_t` 后缀（如 `list_t`, `stack_t`, `queue_t`）
 - **内存安全:** 所有 `malloc` 返回值均做 NULL 检查；`list_destroy` 使用二级指针将调用者指针置空
 - **负索引支持:** 类似 Python 的负索引，`-1` 表示尾部，`-2` 表示倒数第二个
 - **格式化:** 遵循 `.clang-format` 中定义的 Google C++ 风格（4 空格缩进，80 列宽限制）
